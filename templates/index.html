@@ -1,36 +1,44 @@
-<html>
+<!doctype html>
+<html lang="en">
 
-<head>
-  <script src="{{url_for('static', filename='bower_components/cheet.js/cheet.min.js')}}"></script>
-  <script src="{{url_for('static', filename='bower_components/jquery-3.7.1.min/index.js')}}"></script>
-  <link rel="stylesheet" type="text/css"
-    href="{{url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
-  <script>
-    cheet.done(function () {
-      return $('.easter').empty();
-    });
-    cheet.fail(function () {
-      
-      return $('.easter').empty();
-    });
-    cheet.next(function (str, key) {
-      if (key === 'up' || key === 'down' || key === 'left' || key === 'right') {
-        return $('.easter').append('<i class="fa fa-arrow-circle-' + key + '">');
-      } else {
-        return $('.easter').append(key);
-      }
-    });
-    cheet('up up down down left right left right', function () {
-      console.log("The lockbox is abg")
-      window.alert("Check the console logs!");
-    });
-  </script>
+  <head>
+    <script src="{{url_for('static', filename='bower_components/cheet.js/cheet.min.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}"
+    />
+    <script>
+      cheet.done(function () {
+        return $(".easter").empty();
+      });
+      cheet.fail(function () {
+        return $(".easter").empty();
+      });
+      cheet.next(function (str, key) {
+        if (
+          key === "up" ||
+          key === "down" ||
+          key === "left" ||
+          key === "right"
+        ) {
+          return $(".easter").append(
+            '<i class="fa fa-arrow-circle-' + key + '">'
+          );
+        } else {
+          return $(".easter").append(key);
+        }
+      });
+      cheet("up up down down left right left right", function () {
+        console.log("The lockbox is abg");
+        window.alert("Check the console logs!");
+      });
+    </script>
+  </head>
 
-</head>
-
-<body style="background-color:#fdf;">
-  <div class="easter"></div>
-  <p>Try typing a combination using the arrow keys!</p>
-</body>
-
+  <body style="background-color: #fdf">
+    <div class="easter"></div>
+    <p>Try typing a combination using the arrow keys!</p>
+  </body>
 </html>
