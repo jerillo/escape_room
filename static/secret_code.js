@@ -4,7 +4,11 @@ arrow = (dir) => {
 
 const directions = ['up', 'down', 'left', 'right'];
 
-cheet("up up down down left right left right", {
+sequence = () => {
+    return $("meta[name='code']").attr('content');
+}
+
+cheet(sequence(), {
     next: (str, key) => {
         if (directions.includes(key)) {
             return $(".easter").append(arrow(key));
