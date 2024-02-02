@@ -8,8 +8,6 @@ const checkCode = (input) => {
   $.post("check_code", { 'code': input.join(' ') }, (data, status) => {
     if (data.res) {
       $(".combo").text(data.res);
-      // disable hotkeys once code is correct
-      hotkeys.unbind();
     } else {
       reset();
     }
@@ -41,9 +39,10 @@ hotkeys('up,down,left,right', (event, handler) => {
 });
 
 /**
- * Detect backspaces.
+ * Detect backspaces for deleting input.
  */
 hotkeys('backspace', (event, handler) => {
   input.pop();
   $(`#input-${input.length}`).empty();
+  $(".combo").empty();
 });
