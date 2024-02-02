@@ -1,4 +1,4 @@
-const input = []
+const input = [];
 
 const arrow = (dir) => {
   return `<i class="bi bi-arrow-${dir}-circle-fill" style="font-size: 5rem; color: cornflowerblue;"> </i>`;
@@ -6,16 +6,25 @@ const arrow = (dir) => {
 
 const animateError = () => {
   $('.code-input').addClass( "wrong-input" ).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function(){
-    $('.code-input').removeClass( "wrong-input" );
+    $(this).removeClass( "wrong-input" );
   });
+}
+
+const alert = (message, alertType) => {
+  return `<div class="alert alert-${alertType} alert-dismissible fade show" role="alert">
+            <strong class="combo">${message}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`;
 }
 
 const checkCode = (input) => {
   $.post("check_code", { 'code': input.join(' ') }, (data, status) => {
     if (data.res) {
       $(".combo").text(data.res);
+      $(alert(data.res, 'success')).prependTo("#alerts");
     } else {
       animateError();
+      $(alert('Wrong code :(', 'danger')).prependTo("#alerts");
     }
   });
 }
@@ -54,4 +63,5 @@ hotkeys('backspace', (event, handler) => {
   $(`#input-${input.length}`).empty();
   console.log(input)
   $(".combo").empty();
+  $("#alerts").empty();
 }); 
