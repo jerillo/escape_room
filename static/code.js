@@ -1,59 +1,49 @@
-const allowedKeys = {
-  'ArrowUp': 'up',
-  'ArrowDown': 'down',
-  'ArrowLeft': 'left',
-  'ArrowRight': 'right'
-}
-const directions = ["up", "down", "left", "right"];
+const input = []
 
 const arrow = (dir) => {
   return `<i class="bi bi-arrow-${dir}-circle-fill" style="font-size: 5rem; color: cornflowerblue;"> </i>`;
 };
 
+const checkCode = (input) => {
+  $.post("check_code", { 'code': input.join(' ') }, (data, status) => {
+    if (data.res) {
+      $(".combo").text(data.res);
+      // disable hotkeys once code is correct
+      hotkeys.unbind();
+    } else {
+      reset();
+    }
+  });
+}
+
 const reset = () => {
+  // reset input array
+  input.length = 0
+  // clear display
   $(".combo").empty();
   for(let i = 0; i < 8; i++) {
     $(`#input-${i}`).empty();
   }
 }
 
-let pos = 0;
-let inputted = "";
-
-document.addEventListener('keydown', function(e) {
-  const currKey = allowedKeys[e.key]
-  if (pos === 0) {
-    reset();
+/**
+ * Detect arrow key presses.
+ */
+hotkeys('up,down,left,right', (event, handler) => {
+  let key = handler.key;
+  // add pressed arrow to input array, and display
+  $(`#input-${input.length}`).html(arrow(key));
+  input.push(key);
+  // if the input array is the length of the code, check the code
+  if (input.length === 8) {
+    checkCode(input);
   }
-  $(`#input-${pos}`).html(arrow(currKey));
-  $.post("input", { direction: currKey, pos: pos, inputted: inputted }, (data, status) => {
-    pos = data.pos
-    inputted = data.inputted
-    console.log(data)
-    if (data.activateCheats) {
-      activateCheats();
-    }
-  });
-  
-
-  // if (!directions.contains(currKey)) {
-  //   return;
-  // }
-  // if (pos < code.length) {
-  //   $("#code-input").html(arrow(currKey));
-  //   inputted.push(currKey);
-  //   pos++;
-  // } else if (pos == code.length) {
-  //   if (inputted == code) {
-  //     activateCheats();
-  //   } else {
-  //     reset();
-  //   }
-  // }
 });
-const activateCheats = () => {
-  $.post("submit_code", (data, status) => {
-    $(".combo").text(data);
-  });
-}
 
+/**
+ * Detect backspaces.
+ */
+hotkeys('backspace', (event, handler) => {
+  input.pop();
+  $(`#input-${input.length}`).empty();
+});
